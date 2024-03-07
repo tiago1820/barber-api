@@ -13,6 +13,8 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 
     protected $hidden = ['password'];
 
+    public $timestamps = false;
+
     public function getJWTIdentifier()
     {
         return $this->getKey();
