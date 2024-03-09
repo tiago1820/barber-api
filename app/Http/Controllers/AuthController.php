@@ -13,7 +13,7 @@ use function Laravel\Prompts\password;
 class AuthController extends Controller
 {
     public function __construct(){
-        $this->middleware('auth:api', ['except' => ['create', 'login']]);
+        $this->middleware('auth:api', ['except' => ['create', 'login', 'unauthorized']]);
     }
 
     public function create(Request $request) {
@@ -111,5 +111,11 @@ class AuthController extends Controller
         $array['token'] = $token;
 
         return $array;
+    }
+
+    public function unauthorized() {
+        return response()->json([
+            'error' => 'Unauthorized'
+        ], 401);
     }
 }
