@@ -49,7 +49,7 @@ class AuthController extends Controller
                 ]);
 
                 if(!$token) {
-                    $array['error'] = 'Ocorreu um erro!';
+                    $array['error'] = 'An error occurred!';
                     return $array;
                 }
 
@@ -59,16 +59,40 @@ class AuthController extends Controller
                 $array['token'] = $token;
 
             } else {
-                $array['error'] = 'E-mail já cadastrado!';
+                $array['error'] = 'Email already registered!';
                 return $array;
             }
 
         } else {
-            $array['error'] = 'Dados incorretos';
+            $array['error'] = 'Incorrect data';
             return $array;
         }
 
         return $array;
 
+    }
+
+    public function login(Request $request) {
+        $array = ['error'=>''];
+
+        $email = $request->input('email');
+        $password = $request->input('password');
+
+        $token = auth()->attempt([
+            'email' => $email,
+            'password' => $password
+        ]);
+
+        if(!$token) {
+            $array['error'] = 'Wrong username and/or password!';
+            return $array;
+        }
+
+        $info = auth()->user();
+        $info['avatar'] = url('media/avatars/'.$info['avatar']);
+        $array['data'] = $info;
+        $array['token'] = $token;
+
+        return $array;
     }
 }
